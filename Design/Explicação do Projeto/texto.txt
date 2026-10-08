@@ -1,4 +1,0 @@
-Este projeto está a ser desenvolvido no ambito escolar, para a Prova de Apitidão Proficional (PAP).
-
-Este projeto é um MarketPlace, da área de venda de peças automóveis... Onde terá parcerias com empresas de Leiria, para ser algo mais real.
-Enquanto muitos gastam tempo a ir ao local da loja, com este projeto iriamos evitar deslocoção de casa/oficina até a empresa, ainda vai ter levantamento na loja se assim a empresa o entender fazer.

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock | AutoLeiria</title>
+<style>
+  :root{
+    --bg:#f4f6f8; --card:#fff; --txt:#1f2933; --muted:#6b7280; --line:#e5e7eb;
+    --ok:#16a34a; --baixo:#d97706; --esgotado:#dc2626;
+    --c1:#2563eb; --c2:#db2777; --c3:#059669;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt)}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
+  .stock-head h1{margin:0 0 4px;font-size:28px}
+  .stock-head p{margin:0 0 20px;color:var(--muted)}
+  .resumo{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+  .resumo div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+  .resumo b{font-size:22px}
+  .resumo span{color:var(--muted);font-size:13px}
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+  .tabs a{text-decoration:none;color:var(--txt);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;transition:.15s;cursor:pointer}
+  .tabs a:hover{border-color:#cbd5e1}
+  .tabs a.on{background:var(--txt);color:#fff;border-color:var(--txt)}
+  .tabs a small{opacity:.7;margin-left:4px}
+  .tabs a.c-c1{border-left:4px solid var(--c1)}
+  .tabs a.c-c2{border-left:4px solid var(--c2)}
+  .tabs a.c-c3{border-left:4px solid var(--c3)}
+  .filtros{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+  .filtros input,.filtros select{padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);font-size:14px;min-width:180px;flex:1}
+  .filtros button{padding:10px 18px;border:0;border-radius:8px;background:var(--txt);color:#fff;font-size:14px;cursor:pointer}
+  .filtros .limpar{display:inline-flex;align-items:center;padding:0 12px;color:var(--c1);text-decoration:none;font-size:14px;cursor:pointer}
+  .empresa{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:20px;overflow:hidden;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .empresa.c-c1{border-top:4px solid var(--c1)}
+  .empresa.c-c2{border-top:4px solid var(--c2)}
+  .empresa.c-c3{border-top:4px solid var(--c3)}
+  .empresa-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
+  .empresa-top h2{margin:0 0 2px;font-size:18px}
+  .empresa-top .sub{margin:0;color:var(--muted);font-size:13px}
+  .empresa-n{font-size:13px;color:var(--muted);align-self:center}
+  .empresa-n b{color:var(--txt)}
+  .tabela-wrap{overflow-x:auto}
+  .tabela{width:100%;border-collapse:collapse;font-size:14px}
+  .tabela th,.tabela td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+  .tabela th{background:#f9fafb;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.03em}
+  .tabela tr:last-child td{border-bottom:0}
+  .tabela tbody tr{transition:background .15s}
+  .tabela tbody tr:hover{background:#f8fafc}
+  .tabela .r{text-align:right}
+  .tabela .ref b{font-family:ui-monospace,monospace;font-size:13px}
+  .tabela .preco-s{font-weight:600}
+  .chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600}
+  .chip.ok{background:#dcfce7;color:var(--ok)}
+  .chip.baixo{background:#fef3c7;color:var(--baixo)}
+  .chip.esgotado{background:#fee2e2;color:var(--esgotado)}
+  .vazio{padding:20px 18px;color:var(--muted);font-size:14px;margin:0}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--txt);color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;transition:.3s;z-index:9999;opacity:0}
+  .toast.on{transform:translateX(-50%) translateY(0);opacity:1}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="stock-head">
+    <h1>Stock</h1>
+    <p>Disponibilidade por empresa, atualizada pelas próprias lojas.</p>
+  </div>
+
+  <div class="resumo" id="resumo"></div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <form class="filtros" id="filtros" onsubmit="return false">
+    <input type="text" id="q" placeholder="Referência, peça ou categoria" aria-label="Pesquisar no stock">
+    <select id="estado" aria-label="Estado do stock">
+      <option value="">Todo o stock</option>
+      <option value="ok">Em stock</option>
+      <option value="baixo">Stock baixo</option>
+      <option value="esgotado">Esgotado</option>
+    </select>
+    <button type="submit">Filtrar</button>
+    <a class="limpar" id="limpar" style="display:none">Limpar</a>
+  </form>
+
+  <div id="conteudo"></div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- DADOS ---------- */
+const parceiros = [
+  {cor:'c1', nome:'AutoLeiria Peças', desc:'Peças originais e equivalentes', local:'Leiria'},
+  {cor:'c2', nome:'Leiria Motors',    desc:'Peças multimarca',              local:'Marinha Grande'},
+  {cor:'c3', nome:'Centro Auto',      desc:'Peças e acessórios',            local:'Leiria'}
+];
+const stock = {
+  c1: [
+    {ref:'BRK-1024', titulo:'Pastilhas de travão dianteiras', cat:'Travagem',      estado:'Novo',           qtd:8, preco:120},
+    {ref:'FLT-2210', titulo:'Filtro de óleo',                 cat:'Motor',         estado:'Novo',           qtd:2, preco:15},
+    {ref:'AMT-7781', titulo:'Amortecedor traseiro',           cat:'Suspensão',     estado:'Usado',          qtd:0, preco:95}
+  ],
+  c2: [
+    {ref:'ALT-5540', titulo:'Alternador 90A',                 cat:'Elétrica',      estado:'Recondicionado', qtd:5, preco:210},
+    {ref:'RAD-3302', titulo:'Radiador de água',               cat:'Arrefecimento', estado:'Novo',           qtd:4, preco:140}
+  ],
+  c3: [
+    {ref:'FAR-9910', titulo:'Farol dianteiro esquerdo',       cat:'Iluminação',    estado:'Novo',           qtd:1, preco:320},
+    {ref:'PNE-4408', titulo:'Pneu 205/55 R16',                cat:'Pneus',         estado:'Novo',           qtd:5, preco:85}
+  ]
+};
+
+/* ---------- HELPERS ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const eur = v => new Intl.NumberFormat('pt-PT').format(v) + ' €';
+function estadoStock(q){ if(q===0) return ['esgotado','Esgotado']; return q<=2 ? ['baixo','Stock baixo'] : ['ok','Em stock']; }
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('on'), 2200);
+}
+
+/* ---------- ESTADO ---------- */
+let filtroEmp = '';
+let filtroQ = '';
+let filtroEst = '';
+
+/* ---------- TOTAIS ---------- */
+function renderResumo(){
+  let totRef = 0, totUn = 0, totVal = 0;
+  Object.values(stock).forEach(itens => itens.forEach(i => {
+    totRef++; totUn += i.qtd; totVal += i.qtd * i.preco;
+  }));
+  $('#resumo').innerHTML = `
+    <div><b>${totRef}</b><span>Referências</span></div>
+    <div><b>${totUn}</b><span>Unidades</span></div>
+    <div><b>${eur(totVal)}</b><span>Valor em stock</span></div>
+    <div><b>${parceiros.length}</b><span>Empresas</span></div>`;
+}
+
+/* ---------- TABS ---------- */
+function renderTabs(){
+  const tabs = $('#tabs');
+  tabs.innerHTML = `
+    <a class="${filtroEmp===''?'on':''}" data-emp="">Todas</a>
+    ${parceiros.map(p => `
+      <a class="c-${p.cor} ${filtroEmp===p.cor?'on':''}" data-emp="${p.cor}">
+        ${esc(p.nome)} <small>${(stock[p.cor]||[]).length}</small>
+      </a>`).join('')}`;
+}
+$('#tabs').addEventListener('click', e => {
+  const a = e.target.closest('a'); if (!a) return;
+  filtroEmp = a.dataset.emp;
+  renderTabs(); renderConteudo();
+});
+
+/* ---------- FILTROS ---------- */
+$('#q').addEventListener('input', e => { filtroQ = e.target.value; renderConteudo(); });
+$('#estado').addEventListener('change', e => { filtroEst = e.target.value; renderConteudo(); });
+$('#filtros').addEventListener('submit', e => { e.preventDefault(); renderConteudo(); });
+$('#limpar').addEventListener('click', () => {
+  filtroQ = ''; filtroEst = '';
+  $('#q').value = ''; $('#estado').value = '';
+  renderConteudo();
+});
+
+/* ---------- CONTEÚDO ---------- */
+function renderConteudo(){
+  const q = filtroQ.trim().toLowerCase();
+  const est = filtroEst;
+  const mostraLimpar = q !== '' || est !== '';
+  $('#limpar').style.display = mostraLimpar ? 'inline-flex' : 'none';
+
+  let html = '';
+  let algum = false;
+
+  parceiros.forEach(p => {
+    if (filtroEmp && filtroEmp !== p.cor) return;
+    const todos = stock[p.cor] || [];
+    const itens = todos.filter(i => {
+      if (q && !(i.titulo + ' ' + i.ref + ' ' + i.cat).toLowerCase().includes(q)) return false;
+      if (est && estadoStock(i.qtd)[0] !== est) return false;
+      return true;
+    });
+    const un = todos.reduce((s,i)=>s+i.qtd,0);
+    const val = todos.reduce((s,i)=>s+i.qtd*i.preco,0);
+    algum = true;
+
+    html += `
+      <section class="empresa c-${p.cor}" id="${p.cor}">
+        <div class="empresa-top">
+          <div>
+            <h2>${esc(p.nome)}</h2>
+            <p class="sub">${esc(p.desc)} · ${esc(p.local)}</p>
+          </div>
+          <div class="empresa-n"><b>${todos.length}</b> refs · <b>${un}</b> un. · <b>${eur(val)}</b></div>
+        </div>`;
+    if (!itens.length){
+      html += `<p class="vazio">Sem resultados nesta empresa para os filtros escolhidos.</p>`;
+    } else {
+      html += `<div class="tabela-wrap"><table class="tabela">
+        <thead><tr><th>Referência</th><th>Peça</th><th>Categoria</th><th>Estado</th><th class="r">Qtd.</th><th>Stock</th><th class="r">Preço</th></tr></thead>
+        <tbody>${itens.map(i => {
+          const [cl, txt] = estadoStock(i.qtd);
+          return `<tr>
+            <td class="ref"><b>${esc(i.ref)}</b></td>
+            <td>${esc(i.titulo)}</td>
+            <td>${esc(i.cat)}</td>
+            <td>${esc(i.estado)}</td>
+            <td class="r">${i.qtd}</td>
+            <td><span class="chip ${cl}">${txt}</span></td>
+            <td class="r preco-s">${eur(i.preco)}</td>
+          </tr>`;
+        }).join('')}</tbody></table></div>`;
+    }
+    html += `</section>`;
+  });
+
+  if (!algum) html = '<p class="vazio">Sem resultados.</p>';
+  $('#conteudo').innerHTML = html;
+}
+
+/* ---------- INIT ---------- */
+renderResumo();
+renderTabs();
+renderConteudo();
+</script>
+</body>
+</html>

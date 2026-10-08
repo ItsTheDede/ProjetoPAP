@@ -3,157 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LisAuto Market, marketplace automóvel B2B</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<title>AutoLeiria, marketplace automóvel B2B</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-:root{
-  --bg:#ECEEF0; --panel:#F8F9FA; --ink:#11202E; --steel:#566472; --line:#C9D0D6;
-  --sinal:#F2B705; --gui:#2C5282; --gami:#2F8F57; --sami:#D9661F;
-}
-body.dark{
-  --bg:#12171B; --panel:#1A2127; --ink:#E6EBEF; --steel:#93A0AC; --line:#2F3A43;
-  --gui:#6FA3DE; --gami:#5CC48A; --sami:#F08C4A;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font:400 16px/1.55 'Barlow',system-ui,sans-serif;background:var(--bg);color:var(--ink);transition:background .25s,color .25s}
-a{color:inherit}
-:focus-visible{outline:3px solid var(--sinal);outline-offset:2px}
-h1,h2,h3,.cond{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:700;letter-spacing:.01em}
+  :root{
+    --bg:#f4f6f8; --card:#fff; --txt:#1f2933; --muted:#6b7280; --line:#e5e7eb;
+    --c1:#2563eb; --c2:#db2777; --c3:#059669;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt)}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 16px 60px}
 
-header{display:flex;align-items:center;gap:28px;padding:14px 32px;background:var(--ink);color:#fff;position:sticky;top:0;z-index:100}
-body.dark header{background:#0B0F12}
-.logo{font:700 26px 'Barlow Condensed',sans-serif;text-decoration:none;padding-right:18px;border-right:4px solid var(--sinal)}
-nav{display:flex;gap:22px;font-size:15px;flex:1}
-nav a{text-decoration:none;opacity:.8;padding:4px 0;border-bottom:2px solid transparent}
-nav a:hover{opacity:1;border-color:var(--sinal)}
-.hbtn{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;font:500 14px 'Barlow',sans-serif;padding:7px 14px;border-radius:3px;cursor:pointer}
-.hbtn:hover{background:rgba(255,255,255,.12)}
+  /* HERO */
+  .hero{text-align:center;padding:60px 16px 40px}
+  .hero h1{font-size:clamp(26px,4vw,40px);margin:0 0 12px}
+  .hero p{color:var(--muted);max-width:640px;margin:0 auto 24px}
+  .procura{display:flex;gap:8px;max-width:520px;margin:0 auto}
+  .procura input{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;font-size:15px;background:var(--card)}
+  .procura button{padding:12px 22px;border:0;border-radius:10px;background:var(--txt);color:#fff;font-size:15px;cursor:pointer;transition:.15s}
+  .procura button:hover{opacity:.85}
 
-.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
-.hero{padding:72px 0 56px;border-bottom:1px solid var(--line)}
-.hero h1{font-size:clamp(44px,7.5vw,92px);line-height:.95;max-width:12em;margin-bottom:22px}
-.hero p{max-width:34em;color:var(--steel);font-size:18px;margin-bottom:34px}
-.procura{display:flex;max-width:720px;border:2px solid var(--ink)}
-.procura input{flex:1;min-width:0;border:0;background:var(--panel);color:var(--ink);font:500 17px 'Barlow',sans-serif;padding:16px 18px}
-.procura input::placeholder{color:var(--steel)}
-.procura button{border:0;background:var(--sinal);color:#11202E;font:700 20px 'Barlow Condensed',sans-serif;padding:0 30px;cursor:pointer}
-.procura button:hover{filter:brightness(.94)}
+  section{margin-bottom:44px}
+  h2{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:14px}
 
-section{padding:56px 0 8px}
-h2{font-size:34px;margin-bottom:6px}
-.sub{color:var(--steel);margin-bottom:26px;max-width:40em}
+  /* PARCEIROS */
+  .parceiros{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .parceiro{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px;position:relative;transition:.2s;cursor:pointer}
+  .parceiro:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.06)}
+  .parceiro i{width:10px;height:10px;border-radius:50%;background:var(--c1);position:absolute;top:16px;right:16px}
+  .parceiro b{font-size:16px}
+  .parceiro b small{display:block;font-weight:400;color:var(--muted);font-size:12px;margin-top:2px}
+  .parceiro span{font-size:13px;color:var(--muted)}
+  .parceiro .n{color:var(--txt);font-weight:600}
+  .parceiro.c-c1 i{background:var(--c1)} .parceiro.c-c1 b{color:var(--c1)}
+  .parceiro.c-c2 i{background:var(--c2)} .parceiro.c-c2 b{color:var(--c2)}
+  .parceiro.c-c3 i{background:var(--c3)} .parceiro.c-c3 b{color:var(--c3)}
 
-/* parceiros como tabela */
-.parceiros{border-top:2px solid var(--ink)}
-.parceiro{display:grid;grid-template-columns:8px 1.4fr 1.6fr 1fr 90px 70px;gap:18px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
-.parceiro i{align-self:stretch;background:var(--c);display:block}
-.parceiro b{font:700 24px 'Barlow Condensed',sans-serif}
-.parceiro small{display:block;font-size:13px;color:var(--steel);font-weight:400;font-family:'Barlow',sans-serif}
-.parceiro span{font-size:14px;color:var(--steel)}
-.parceiro .n{color:var(--ink);font-weight:600;text-align:right}
+  /* MAPA */
+  .mapa-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:12px;margin-bottom:12px}
+  .leg{display:flex;gap:14px;flex-wrap:wrap;font-size:13px}
+  .leg span{display:inline-flex;align-items:center;gap:6px}
+  .leg span::before{content:"";width:10px;height:10px;border-radius:50%;background:currentColor}
+  .leg .c-c1{color:var(--c1)} .leg .c-c2{color:var(--c2)} .leg .c-c3{color:var(--c3)}
+  #mapa{height:380px;border-radius:12px;border:1px solid var(--line);overflow:hidden}
+  .pin{width:30px;height:30px;border-radius:50%;background:var(--c,#2563eb);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.25)}
 
-/* mapa */
-.mapa-top{display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:12px;margin-bottom:14px}
-.leg{display:flex;gap:18px;font-size:14px;color:var(--steel)}
-.leg span::before{content:"";display:inline-block;width:10px;height:10px;background:var(--c);margin-right:7px}
-#mapa{height:420px;border:2px solid var(--ink);background:#dfe3e7;z-index:1}
-.pin{width:30px;height:30px;background:var(--c);color:#fff;font:700 13px/26px 'Barlow Condensed',sans-serif;text-align:center;border:2px solid #fff;border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.4)}
-.leaflet-popup-content{font-family:'Barlow',sans-serif;font-size:14px;margin:12px 14px}
-.leaflet-popup-content b{font:700 20px 'Barlow Condensed',sans-serif;display:block}
-.leaflet-popup-content a{display:inline-block;margin-top:8px;color:#11202E;font-weight:600}
+  /* SOBRE */
+  .sobre{display:grid;grid-template-columns:1fr 1fr;gap:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px}
+  .lead{color:var(--muted);line-height:1.6}
+  .pontos{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .pontos div h3{margin:0 0 4px;font-size:15px}
+  .pontos div p{margin:0;font-size:13px;color:var(--muted);line-height:1.5}
 
-/* sobre */
-.sobre{display:grid;grid-template-columns:1fr 1.3fr;gap:56px;align-items:start}
-.sobre p.lead{font-size:18px;line-height:1.6}
-.pontos{display:grid;grid-template-columns:1fr 1fr;gap:28px 32px}
-.pontos h3{font-size:21px;padding-top:10px;border-top:3px solid var(--sinal);margin-bottom:6px}
-.pontos p{font-size:15px;color:var(--steel)}
+  /* CATEGORIAS */
+  .cats{display:flex;flex-wrap:wrap;gap:8px}
+  .cats a{text-decoration:none;color:var(--txt);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:14px;transition:.15s}
+  .cats a:hover{background:var(--txt);color:#fff;border-color:var(--txt)}
 
-/* categorias */
-.cats{display:flex;flex-wrap:wrap;gap:10px}
-.cats a{background:var(--panel);border:1px solid var(--line);padding:10px 20px;text-decoration:none;font:600 20px 'Barlow Condensed',sans-serif;border-radius:3px}
-.cats a:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  /* PEÇAS */
+  .pecas{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+  .peca{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:.2s;border-top:4px solid var(--c1)}
+  .peca:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.07)}
+  .peca.c-c1{border-top-color:var(--c1)}
+  .peca.c-c2{border-top-color:var(--c2)}
+  .peca.c-c3{border-top-color:var(--c3)}
+  .peca .foto{height:120px;background:linear-gradient(135deg,#eef2f7,#e2e8f0);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;position:relative}
+  .peca .foto em{color:var(--muted);font-size:12px;font-style:normal}
+  .peca .foto strong{font-size:11px;text-transform:uppercase;letter-spacing:.05em;background:#fff;padding:3px 10px;border-radius:999px;color:var(--txt)}
+  .peca .pb{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .peca h3{margin:0;font-size:15px}
+  .peca .ref{margin:0;font-size:12px;color:var(--muted);font-family:ui-monospace,monospace}
+  .peca .loja{margin:0;font-size:13px;color:var(--muted)}
+  .peca .pf{margin-top:auto;display:flex;justify-content:space-between;align-items:center;padding-top:10px}
+  .peca .preco{font-size:18px;font-weight:700}
+  .peca .res{padding:8px 14px;border:0;border-radius:8px;background:var(--txt);color:#fff;font-size:13px;cursor:pointer;transition:.15s}
+  .peca .res:hover{opacity:.85}
+  .peca .res.ok{background:var(--c3)}
 
-/* peças */
-.pecas{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px}
-.peca{background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column}
-.foto{height:150px;background:repeating-linear-gradient(135deg,transparent 0 12px,var(--line) 12px 13px);display:flex;align-items:flex-end;justify-content:space-between;padding:12px 14px;border-bottom:4px solid var(--c)}
-.foto em{font-style:normal;font-size:13px;color:var(--steel)}
-.foto strong{background:var(--panel);padding:2px 8px;font-size:13px;font-weight:600;border:1px solid var(--line)}
-.pb{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
-.pb h3{font-size:25px;line-height:1.1;margin-bottom:8px}
-.ref{font-size:14px;color:var(--steel)}
-.ref b{color:var(--ink);font-weight:600;letter-spacing:.02em}
-.loja{font-size:14px;color:var(--steel);margin:2px 0 18px}
-.pf{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
-.preco{font:700 32px 'Barlow Condensed',sans-serif}
-.res{background:var(--ink);color:var(--bg);border:0;padding:10px 20px;font:700 18px 'Barlow Condensed',sans-serif;cursor:pointer;border-radius:3px}
-.res:hover{background:var(--sinal);color:#11202E}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--txt);color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;transition:.3s;z-index:9999;opacity:0}
+  .toast.on{transform:translateX(-50%) translateY(0);opacity:1}
 
-.impacto{margin:64px 0 0;padding:28px 32px;background:var(--ink);color:#fff;border-left:10px solid var(--sinal);font-size:18px}
-body.dark .impacto{background:var(--panel);color:var(--ink)}
-.impacto b{font:700 28px 'Barlow Condensed',sans-serif}
-footer{margin-top:64px;padding:28px 32px;border-top:1px solid var(--line);color:var(--steel);font-size:14px}
-
-@media(max-width:820px){
-  header{padding:12px 16px;gap:14px}
-  nav{display:none}
-  .wrap{padding:0 18px}
-  .hero{padding:44px 0 40px}
-  .parceiro{grid-template-columns:6px 1fr auto;gap:4px 14px}
-  .parceiro span:nth-of-type(1){grid-column:2/4}
-  .sobre{grid-template-columns:1fr;gap:32px}
-  .pontos{grid-template-columns:1fr}
-  #mapa{height:320px}
-}
+  @media(max-width:720px){
+    .sobre{grid-template-columns:1fr}
+    .pontos{grid-template-columns:1fr}
+  }
 </style>
 </head>
 <body>
-
-<header>
-  <a class="logo" href="#">AutoLeiria</a>
-  <nav>
-    <a href="#parceiros">Parceiros</a>
-    <a href="#lojas">Lojas</a>
-    <a href="#projeto">O projeto</a>
-    <a href="#pecas">Peças</a>
-  </nav>
-  <button class="hbtn" id="themeToggle" onclick="toggleTheme()">Modo escuro</button>
-  <a class="hbtn" href="login.html" style="text-decoration:none">Entrar</a>
-</header>
-
 <main class="wrap">
   <div class="hero">
     <h1>A peça certa, do parceiro certo, hoje.</h1>
     <p>Peças usadas, recondicionadas e novas de três empresas do distrito de Leiria. Levante na loja ou receba na oficina no próprio dia.</p>
-    <form class="procura" onsubmit="return false">
-      <input type="text" aria-label="Pesquisar" placeholder="Referência OEM, marca ou modelo">
-      <button>Procurar</button>
+    <form class="procura" id="formProcura" onsubmit="return false">
+      <input type="text" id="q" aria-label="Pesquisar" placeholder="Referência OEM, marca ou modelo">
+      <button type="submit">Procurar</button>
     </form>
   </div>
 
   <section id="parceiros">
     <h2>Empresas parceiras</h2>
     <p class="sub">Cada empresa mantém a sua marca, os seus preços e o seu stock.</p>
-    <div class="parceiros">
-      <div class="parceiro" style="--c:var(--gui)"><i></i><b>GuiPeças<small>Comércio de peças e acessórios</small></b><span>Guia, Pombal</span><span>Verificado</span><span class="n">1 240 peças</span><span class="n">4,5 ★</span></div>
-      <div class="parceiro" style="--c:var(--gami)"><i></i><b>GamiPeças<small>Retificadora, recondicionamento de motores</small></b><span>Pombal</span><span>Verificado</span><span class="n">860 peças</span><span class="n">4,9 ★</span></div>
-      <div class="parceiro" style="--c:var(--sami)"><i></i><b>SamiParts<small>Comércio de peças auto</small></b><span>Pombal</span><span>Verificado</span><span class="n">540 peças</span><span class="n">4,4 ★</span></div>
-    </div>
+    <div class="parceiros" id="parceirosList"></div>
   </section>
 
   <section id="lojas">
     <div class="mapa-top">
       <div><h2>Onde levantar</h2><p class="sub" style="margin:0">Lojas físicas dos parceiros.</p></div>
-      <div class="leg">
-        <span style="--c:var(--gui)">GuiPeças</span>
-        <span style="--c:var(--gami)">GamiPeças</span>
-        <span style="--c:var(--sami)">SamiParts</span>
-      </div>
+      <div class="leg" id="leg"></div>
     </div>
     <div id="mapa"></div>
   </section>
@@ -177,77 +134,132 @@ footer{margin-top:64px;padding:28px 32px;border-top:1px solid var(--line);color:
   <section id="categorias">
     <h2>Categorias</h2>
     <p class="sub">Comece pelo sistema do veículo.</p>
-    <div class="cats">
-      <a href="#">Motor</a><a href="#">Travagem</a><a href="#">Ótica</a><a href="#">Suspensão</a><a href="#">Jantes</a><a href="#">Eletrónica</a>
-    </div>
+    <div class="cats" id="cats"></div>
   </section>
 
   <section id="pecas">
     <h2>Peças disponíveis</h2>
-    <p class="sub">Stock atualizado pelas próprias lojas.</p>
-    <div class="pecas">
-      <article class="peca" style="--c:var(--gui)">
-        <div class="foto"><em>Foto em breve</em><strong>Recondicionado</strong></div>
-        <div class="pb">
-          <h3>Alternador BMW 320d E90</h3>
-          <p class="ref">Ref. <b>Bosch 0124 525 068</b></p>
-          <p class="loja">GuiPeças, Guia (Pombal)</p>
-          <div class="pf"><span class="preco">180 €</span><button class="res">Reservar</button></div>
-        </div>
-      </article>
-      <article class="peca" style="--c:var(--gami)">
-        <div class="foto"><em>Foto em breve</em><strong>Novo</strong></div>
-        <div class="pb">
-          <h3>Discos de travão Brembo, par</h3>
-          <p class="ref">Ref. <b>Brembo 09.A417.11</b></p>
-          <p class="loja">GamiPeças, Pombal</p>
-          <div class="pf"><span class="preco">210 €</span><button class="res">Reservar</button></div>
-        </div>
-      </article>
-      <article class="peca" style="--c:var(--sami)">
-        <div class="foto"><em>Foto em breve</em><strong>Recondicionado</strong></div>
-        <div class="pb">
-          <h3>Farol VW Golf VI</h3>
-          <p class="ref">Ref. <b>VW 5K1 941 005</b></p>
-          <p class="loja">SamiParts, Pombal</p>
-          <div class="pf"><span class="preco">140 €</span><button class="res">Reservar</button></div>
-        </div>
-      </article>
-    </div>
+    <p class="sub" id="pecasSub">Stock atualizado pelas próprias lojas.</p>
+    <div class="pecas" id="pecas"></div>
   </section>
 </main>
 
-<footer>LisAuto Market, em parceria com GuiPeças, GamiPeças e SamiParts.</footer>
+<div class="toast" id="toast"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-function toggleTheme(){
-  var d = document.body.classList.toggle('dark');
-  document.getElementById('themeToggle').textContent = d ? 'Modo claro' : 'Modo escuro';
+/* ---------- DADOS (substituem o PHP) ---------- */
+const parceiros = [
+  {cor:'c1', nome:'AutoLeiria Peças', desc:'Peças originais e equivalentes', local:'Leiria', pecas:7, nota:'4.8'},
+  {cor:'c2', nome:'Leiria Motors',    desc:'Peças multimarca',              local:'Marinha Grande', pecas:6, nota:'4.6'},
+  {cor:'c3', nome:'Centro Auto',      desc:'Peças e acessórios',            local:'Leiria', pecas:5, nota:'4.9'}
+];
+const lojas = [
+  {nome:'AutoLeiria Peças', sigla:'AL', cor:'#2563eb', tipo:'Loja', info:'Rua das Peças 12, Leiria',  coords:[39.743,-8.807], gmaps:'https://maps.google.com/?q=39.743,-8.807'},
+  {nome:'Leiria Motors',    sigla:'LM', cor:'#db2777', tipo:'Loja', info:'Av. da Liberdade 45, Marinha Grande', coords:[39.752,-8.932], gmaps:'https://maps.google.com/?q=39.752,-8.932'},
+  {nome:'Centro Auto',      sigla:'CA', cor:'#059669', tipo:'Loja', info:'Parque Industrial, Leiria', coords:[39.730,-8.780], gmaps:'https://maps.google.com/?q=39.730,-8.780'}
+];
+const categorias = ['Motor','Travagem','Suspensão','Elétrica','Arrefecimento','Iluminação','Pneus','Carroçaria'];
+const pecas = [
+  {titulo:'Pastilhas de travão dianteiras', ref:'BRK-1024', loja:'AutoLeiria Peças', cor:'c1', preco:120, estado:'Novo'},
+  {titulo:'Filtro de óleo',                 ref:'FLT-2210', loja:'AutoLeiria Peças', cor:'c1', preco:15,  estado:'Novo'},
+  {titulo:'Amortecedor traseiro',           ref:'AMT-7781', loja:'AutoLeiria Peças', cor:'c1', preco:95,  estado:'Usado'},
+  {titulo:'Alternador 90A',                 ref:'ALT-5540', loja:'Leiria Motors',    cor:'c2', preco:210, estado:'Recondicionado'},
+  {titulo:'Radiador de água',               ref:'RAD-3302', loja:'Leiria Motors',    cor:'c2', preco:140, estado:'Novo'},
+  {titulo:'Farol dianteiro esquerdo',       ref:'FAR-9910', loja:'Centro Auto',      cor:'c3', preco:320, estado:'Novo'},
+  {titulo:'Pneu 205/55 R16',                ref:'PNE-4408', loja:'Centro Auto',      cor:'c3', preco:85,  estado:'Novo'}
+];
+
+/* ---------- HELPERS ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const eur = v => new Intl.NumberFormat('pt-PT').format(v) + ' €';
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('on'), 2200);
 }
-function initMapa(){
-  var map = L.map('mapa',{scrollWheelZoom:false}).setView([39.915,-8.68],11);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(map);
-  var lojas = [
-    {nome:'GuiPeças Do Oeste Lda',tipo:'Loja de peças para automóveis',coords:[39.9446803,-8.7882757],cor:'#2C5282',sigla:'GP',info:'Guia, Pombal, 1 240 peças, 4,5 ★ (37)',gmaps:'https://www.google.com/maps/place/Guipe%C3%A7as+Do+Oeste+Lda/@39.9446803,-8.7882757,17z'},
-    {nome:'GAMIPEÇAS, LDA Peças Auto',tipo:'Loja de peças para automóveis',coords:[39.9249994,-8.6317915],cor:'#2F8F57',sigla:'GaP',info:'Pombal, 860 peças, 4,9 ★ (18)',gmaps:'https://www.google.com/maps/place/GAMIPE%C3%87AS+,+LDA+Pe%C3%A7as+Auto/@39.9249994,-8.6317915,15.67z'},
-    {nome:'Samiparts - Loja Pombal',tipo:'Loja de autopeças',coords:[39.9038062,-8.6337036],cor:'#D9661F',sigla:'SP',info:'Pombal, 540 peças, 4,4 ★ (65)',gmaps:'https://www.google.com/maps/place/Samiparts+-+Loja+Pombal/@39.9038062,-8.6337036,16z'}
-  ];
-  lojas.forEach(function(l){
-    var icone = L.divIcon({className:'',html:'<div class="pin" style="--c:'+l.cor+'">'+l.sigla+'</div>',iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-16]});
-    L.marker(l.coords,{icon:icone}).addTo(map).bindPopup(
-      '<b style="color:'+l.cor+'">'+l.nome+'</b>'+l.tipo+'<br>'+l.info+'<br><a href="'+l.gmaps+'" target="_blank" rel="noopener">Abrir no Google Maps</a>'
-    );
-  });
-  map.fitBounds(L.featureGroup(lojas.map(function(l){return L.marker(l.coords)})).getBounds().pad(0.25));
-}
-window.addEventListener('DOMContentLoaded',function(){
-  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
-    document.body.classList.add('dark');
-    document.getElementById('themeToggle').textContent='Modo claro';
-  }
-  initMapa();
+
+/* ---------- PARCEIROS ---------- */
+$('#parceirosList').innerHTML = parceiros.map(p => `
+  <div class="parceiro c-${p.cor}" data-loja="${esc(p.nome)}">
+    <i></i>
+    <b>${esc(p.nome)}<small>${esc(p.desc)}</small></b>
+    <span>${esc(p.local)}</span>
+    <span>Verificado</span>
+    <span class="n">${p.pecas} peças</span>
+    <span class="n">${esc(p.nota)} ★</span>
+  </div>`).join('');
+
+$('#parceirosList').addEventListener('click', e => {
+  const card = e.target.closest('.parceiro'); if (!card) return;
+  const loja = card.dataset.loja;
+  $('#q').value = loja;
+  filtrar();
+  document.querySelector('#pecas').scrollIntoView({behavior:'smooth'});
+  toast('A mostrar peças de ' + loja);
 });
+
+/* ---------- LEGENDA + MAPA ---------- */
+$('#leg').innerHTML = parceiros.map(p => `<span class="c-${p.cor}">${esc(p.nome)}</span>`).join('');
+
+const map = L.map('mapa',{scrollWheelZoom:false}).setView([39.75,-8.83],11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(map);
+lojas.forEach(l => {
+  const icone = L.divIcon({className:'', html:`<div class="pin" style="--c:${l.cor}">${esc(l.sigla)}</div>`, iconSize:[30,30], iconAnchor:[15,15], popupAnchor:[0,-16]});
+  L.marker(l.coords,{icon:icone}).addTo(map)
+    .bindPopup(`<b style="color:${l.cor}">${esc(l.nome)}</b><br>${esc(l.tipo)}<br>${esc(l.info)}<br><a href="${l.gmaps}" target="_blank" rel="noopener">Abrir no Google Maps</a>`);
+});
+map.fitBounds(L.featureGroup(lojas.map(l => L.marker(l.coords))).getBounds().pad(0.25));
+
+/* ---------- CATEGORIAS ---------- */
+$('#cats').innerHTML = categorias.map(c => `<a href="#" data-cat="${esc(c)}">${esc(c)}</a>`).join('');
+$('#cats').addEventListener('click', e => {
+  const a = e.target.closest('a'); if (!a) return;
+  e.preventDefault();
+  $('#q').value = a.dataset.cat;
+  filtrar();
+  document.querySelector('#pecas').scrollIntoView({behavior:'smooth'});
+});
+
+/* ---------- PEÇAS + FILTRO ---------- */
+function renderPecas(lista, q){
+  const box = $('#pecas');
+  $('#pecasSub').innerHTML = (q ? `${lista.length} resultado(s) para "${esc(q)}". ` : '') + 'Stock atualizado pelas próprias lojas.';
+  if (!lista.length){
+    box.innerHTML = '<p class="sub">Sem resultados. Tente outra pesquisa.</p>';
+    return;
+  }
+  box.innerHTML = lista.map(p => `
+    <article class="peca c-${p.cor}">
+      <div class="foto"><em>Foto em breve</em><strong>${esc(p.estado)}</strong></div>
+      <div class="pb">
+        <h3>${esc(p.titulo)}</h3>
+        <p class="ref">Ref. <b>${esc(p.ref)}</b></p>
+        <p class="loja">${esc(p.loja)}</p>
+        <div class="pf">
+          <span class="preco">${eur(p.preco)}</span>
+          <button class="res" type="button">Reservar</button>
+        </div>
+      </div>
+    </article>`).join('');
+}
+function filtrar(){
+  const q = $('#q').value.trim().toLowerCase();
+  const lista = !q ? pecas : pecas.filter(p =>
+    (p.titulo + ' ' + p.ref + ' ' + p.loja).toLowerCase().includes(q)
+  );
+  renderPecas(lista, $('#q').value.trim());
+}
+$('#formProcura').addEventListener('submit', filtrar);
+$('#q').addEventListener('input', filtrar);
+
+$('#pecas').addEventListener('click', e => {
+  const b = e.target.closest('.res'); if (!b) return;
+  b.classList.add('ok'); b.textContent = 'Reservado ✓'; b.disabled = true;
+  toast('Peça reservada! Receberá confirmação por email.');
+});
+
+renderPecas(pecas, '');
 </script>
 </body>
 </html>
